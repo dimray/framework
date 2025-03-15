@@ -5,36 +5,30 @@ namespace App;
 
 class Flash
 {
-
-
-    const SUCCESS = 'success';
-
-    const INFO = 'info';
-
-    const WARNING = 'warning';
-
-    public static function addMessage($message, $type = 'success')
+    public static function add($key, $value)
     {
+        if (! isset($_SESSION['flash_data'])) {
 
-        if (! isset($_SESSION['flash_notifications'])) {
-            $_SESSION['flash_notifications'] = [];
+            $_SESSION['flash_data'] = [];
         }
 
-        $_SESSION['flash_notifications'][] = [
-            'body' => $message,
-            'type' => $type
-        ];
+        $_SESSION['flash_data'][$key] = $value;
     }
 
-
-    public static function getMessages()
+    public static function get($key)
     {
-        if (isset($_SESSION['flash_notifications'])) {
+        if (isset($_SESSION['flash_data'][$key])) {
 
-            $messages = $_SESSION['flash_notifications'];
-            unset($_SESSION['flash_notifications']);
+            $value = $_SESSION['flash_data'][$key];
 
-            return $messages;
+            unset($_SESSION['flash_data'][$key]);
+
+            return $value;
         }
+    }
+
+    public static function has($key)
+    {
+        return isset($_SESSION['flash_data'][$key]);
     }
 }
